@@ -50,6 +50,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.UUID;
 
 
 class EnvFileConfigurationPanel<T extends RunConfigurationBase<?>> extends JPanel {
@@ -92,7 +93,7 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase<?>> extends JPane
         envFilesTable.setIntercellSpacing(new Dimension(0, 0));
 
         // Create global activation flag
-        useEnvFileCheckBox = new JCheckBox("Enable EnvFile");
+        useEnvFileCheckBox = new JCheckBox("Enable EnvFile2");
         useEnvFileCheckBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -111,6 +112,7 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase<?>> extends JPane
         // TODO: come up with a generic approach for this
         envFilesModel.addRow(
                 EnvFileEntry.builder()
+                        .id(UUID.randomUUID().toString())
                         .parserId(RunConfigEnvVarsProvider.PARSER_ID)
                         .enabled(true)
                         .executable(false)
@@ -210,13 +212,14 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase<?>> extends JPane
 
                     if (selectedFile != null) {
                         String selectedPath = selectedFile.getPath();
-                        String baseDir = runConfig.getProject().getBaseDir().getPath();
-                        if (selectedPath.startsWith(baseDir)) {
+                        String baseDir = runConfig.getProject().getBasePath();
+                        if (baseDir != null && selectedPath.startsWith(baseDir)) {
                             selectedPath = selectedPath.substring(baseDir.length() + 1);
                         }
 
-                        ArrayList<EnvFileEntry> newList = new ArrayList<EnvFileEntry>(model.getItems());
+                        ArrayList<EnvFileEntry> newList = new ArrayList<>(model.getItems());
                         final EnvFileEntry newOptions = EnvFileEntry.builder()
+                                .id(UUID.randomUUID().toString())
                                 .parserId(extension.getId())
                                 .path(selectedPath)
                                 .enabled(true)
@@ -253,7 +256,7 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase<?>> extends JPane
                     AnAction anAction = new AnAction(shortTitle, title, null) {
                         @Override
                         public void actionPerformed(@NotNull AnActionEvent e) {
-                            ArrayList<EnvFileEntry> newList = new ArrayList<EnvFileEntry>(model.getItems());
+                            ArrayList<EnvFileEntry> newList = new ArrayList<>(model.getItems());
                             newList.add(entry);
                             model.setItems(newList);
                             int index = model.getRowCount() - 1;
@@ -271,17 +274,6 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase<?>> extends JPane
         }
 
         final String popupPlace = ActionPlaces.getActionGroupPopupPlace(getClass().getSimpleName());
-/*
-                public ActionGroupPopup(@Nullable WizardPopup parentPopup,
-                @PopupTitle @Nullable String title,
-                @NotNull ActionGroup actionGroup,
-                @NotNull DataContext dataContext,
-                @NotNull String actionPlace,
-                @NotNull PresentationFactory presentationFactory,
-                @NotNull ActionPopupOptions options,
-                @Nullable Runnable disposeCallback) {
-
-  */
 
         ActionPopupOptions actionPopupOptions = ActionPopupOptions.create(false, false, false, false, -1, false, Conditions.<AnAction>alwaysTrue());
         final ListPopup popup =
@@ -289,16 +281,8 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase<?>> extends JPane
                         null, "Add...", actionGroup, DataManager.getInstance().getDataContext(this),
                         popupPlace, new PresentationFactory(), actionPopupOptions, null);
 
-        /*
-        final ListPopup popup =
-                new PopupFactoryImpl.ActionGroupPopup(
-                        "Add...", actionGroup, DataManager.getInstance().getDataContext(this),
-                        false, false, false, false,
-                        null, -1, Conditions.<AnAction>alwaysTrue(), popupPlace);
-               */
-        if (button.getPreferredPopupPoint() != null) {
-            popup.show(button.getPreferredPopupPoint());
-        }
+        button.getPreferredPopupPoint();
+        popup.show(button.getPreferredPopupPoint());
     }
 
     EnvFileSettings getState() {

@@ -1,5 +1,7 @@
 package com.peterjustin.envfile.core.utils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.AbstractMap;
 import java.util.Collections;
 import java.util.Map;
@@ -7,8 +9,8 @@ import java.util.Set;
 
 public class ReadOnceMap<K, V> extends AbstractMap<K, V> implements Map<K, V> {
 
-    private Map<K, V> firstRead;
-    private Map<K, V> otherReads;
+    private final Map<K, V> firstRead;
+    private final Map<K, V> otherReads;
 
     private boolean wasRead = false;
 
@@ -23,7 +25,7 @@ public class ReadOnceMap<K, V> extends AbstractMap<K, V> implements Map<K, V> {
     }
 
     @Override
-    public Set<Entry<K, V>> entrySet() {
+    public @NotNull Set<Entry<K, V>> entrySet() {
         return getSource(true).entrySet();
     }
 

@@ -28,10 +28,10 @@ public interface EnvFileExecutor {
     @Builder
     class Output {
         @NonNull
-        private final Stream<String> stderr;
+        Stream<String> stderr;
 
         @NonNull
-        private final Stream<String> stdout;
+        Stream<String> stdout;
     }
 
     class ReadStdoutAsUtf8 implements EnvFileExecutor {

@@ -32,9 +32,8 @@ public class GradleEnvFileProvider implements GradleExecutionEnvironmentProvider
                 .map(provider -> provider.createExecutionEnvironment(project, executeRunConfigurationTask, executor))
                 .orElse(null);
 
-        if (environment != null && environment.getRunProfile() instanceof GradleRunConfiguration) {
+        if (environment != null && environment.getRunProfile() instanceof GradleRunConfiguration targetConfig) {
             final ApplicationConfiguration sourceConfig = (ApplicationConfiguration) executeRunConfigurationTask.getRunProfile();
-            final GradleRunConfiguration targetConfig = (GradleRunConfiguration) environment.getRunProfile();
             applyEnvFile(sourceConfig, targetConfig);
         }
 

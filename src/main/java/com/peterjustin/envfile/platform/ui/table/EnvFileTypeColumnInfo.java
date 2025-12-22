@@ -49,7 +49,7 @@ public class EnvFileTypeColumnInfo extends ColumnInfo<EnvFileEntry, EnvFileEntry
                 setBorder(null);
 
                 if (entry.isEnabled()) {
-                    if (!EnvVarsProviderExtension.getParserFactoryById(entry.getParserId()).isPresent()) {
+                    if (EnvVarsProviderExtension.getParserFactoryById(entry.getParserId()).isEmpty()) {
                         setForeground(JBColor.RED);
                         setToolTipText("Parser not found!");
                     }

@@ -1,8 +1,10 @@
 package com.peterjustin.envfile.platform;
 
+import com.jetbrains.rhizomedb.Unique;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an EnvFile entry from the run configuration config table.
@@ -10,6 +12,9 @@ import lombok.NonNull;
 @Data
 @Builder
 public class EnvFileEntry {
+
+    @NonNull
+    private final String id;
 
     @NonNull
     private final String parserId;
@@ -23,11 +28,11 @@ public class EnvFileEntry {
     private Boolean executable;
 
     public boolean isEnabled() {
-        return Boolean.TRUE.equals(getEnabled());
+        return getEnabled();
     }
 
     public boolean isExecutable() {
-        return Boolean.TRUE.equals(getExecutable());
+        return getExecutable();
     }
 
 }

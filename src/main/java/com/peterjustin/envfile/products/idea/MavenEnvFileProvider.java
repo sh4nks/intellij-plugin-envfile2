@@ -37,11 +37,8 @@ public class MavenEnvFileProvider implements MavenExecutionEnvironmentProvider {
         ))
         .orElse(null);
 
-    if (environment != null && environment.getRunProfile() instanceof MavenRunConfiguration) {
-      final ApplicationConfiguration sourceConfig =
-          (ApplicationConfiguration) executeRunConfigurationTask.getRunProfile();
-      final MavenRunConfiguration targetConfig =
-          (MavenRunConfiguration) environment.getRunProfile();
+    if (environment != null && environment.getRunProfile() instanceof MavenRunConfiguration targetConfig) {
+      final ApplicationConfiguration sourceConfig = (ApplicationConfiguration) executeRunConfigurationTask.getRunProfile();
       applyEnvFile(sourceConfig, targetConfig);
     }
 

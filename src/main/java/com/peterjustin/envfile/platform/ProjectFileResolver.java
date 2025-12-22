@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
 import java.io.File;
+import java.util.Objects;
 import java.util.Optional;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -21,11 +22,12 @@ public class ProjectFileResolver {
 
         String resolvedPath = path;
         if (!FileUtil.isAbsolute(resolvedPath)) {
-            VirtualFile virtualFile;
+            VirtualFile virtualFile = null;
             try {
-                virtualFile = project.getBaseDir().findFileByRelativePath(resolvedPath);
-            } catch (AssertionError ignored) { // can be thrown deep from IoC implementation
-                virtualFile = null;
+                if(project.getProjectFile() != null) {
+                    virtualFile = project.getProjectFile().findFileByRelativePath(resolvedPath);
+                }
+            } catch (AssertionError | NullPointerException ignored) { // can be thrown deep from IoC implementation
             }
             if (virtualFile != null) {
                 resolvedPath = virtualFile.getPath();

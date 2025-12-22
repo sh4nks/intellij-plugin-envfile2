@@ -12,36 +12,41 @@ import java.util.List;
 public class EnvFileSettings {
 
     @NonNull
-    private final Boolean pluginEnabled;
+    Boolean pluginEnabled;
+
     @NonNull
-    private final Boolean envVarsSubstitutionEnabled;
+    Boolean envVarsSubstitutionEnabled;
+
     @NonNull
-    private final Boolean pathMacroSupported;
+    Boolean pathMacroSupported;
+
     @NonNull
-    private final Boolean ignoreMissing;
+    Boolean ignoreMissing;
+
     @NonNull
-    private final Boolean enableExperimentalIntegrations;
+    Boolean enableExperimentalIntegrations;
+
     @NonNull
-    private final List<EnvFileEntry> entries;
+    List<EnvFileEntry> entries;
 
     public boolean isPluginEnabledEnabled() {
-        return Boolean.TRUE.equals(getPluginEnabled());
+        return getPluginEnabled();
     }
 
     public boolean isSubstituteEnvVarsEnabled() {
-        return Boolean.TRUE.equals(getEnvVarsSubstitutionEnabled());
+        return getEnvVarsSubstitutionEnabled();
     }
 
     public boolean isPathMacroSupported() {
-        return Boolean.TRUE.equals(getPathMacroSupported());
+        return getPathMacroSupported();
     }
 
     public boolean isIgnoreMissing() {
-        return Boolean.TRUE.equals(getIgnoreMissing());
+        return getIgnoreMissing();
     }
 
     public boolean isEnableExperimentalIntegrations() {
-        return Boolean.TRUE.equals(getEnableExperimentalIntegrations());
+        return getEnableExperimentalIntegrations();
     }
 
     public List<EnvFileEntry> getEntries() {

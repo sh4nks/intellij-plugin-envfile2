@@ -1,5 +1,4 @@
-<idea-plugin version="2">
-
+<idea-plugin>
     <extensions defaultExtensionNs="com.intellij">
         <runConfigurationExtension implementation="com.peterjustin.envfile.products.idea.IdeaRunConfigurationExtension" id="envfileIdea"/>
     </extensions>

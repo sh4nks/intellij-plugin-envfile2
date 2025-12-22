@@ -20,9 +20,10 @@ import javax.swing.JComponent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class EnvFileConfigurationEditor<T extends RunConfigurationBase<?>> extends SettingsEditor<T> {
-    private static final Key<EnvFileSettings> USER_DATA_KEY = new Key<EnvFileSettings>("EnvFile Settings");
+    private static final Key<EnvFileSettings> USER_DATA_KEY = new Key<>("EnvFile2 Settings");
 
     private static final String SERIALIZATION_ID = "com.peterjustin.envfile";
 
@@ -36,17 +37,18 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase<?>> exten
     private static final String FIELD_EXPERIMENTAL_INTEGRATIONS = "IS_ENABLE_EXPERIMENTAL_INTEGRATIONS";
     private static final String FIELD_PATH = "PATH";
     private static final String FIELD_PARSER = "PARSER";
+    private static final String FIELD_ID = "ID";
 
     private static final String FIELD_IS_EXECUTABLE = "IS_EXECUTABLE";
 
     private final EnvFileConfigurationPanel<T> editor;
 
     public EnvFileConfigurationEditor(T configuration) {
-        editor = new EnvFileConfigurationPanel<T>(configuration);
+        editor = new EnvFileConfigurationPanel<>(configuration);
     }
 
     public static String getEditorTitle() {
-        return "EnvFile";
+        return "EnvFile2";
     }
 
     @Override
@@ -84,7 +86,9 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase<?>> exten
         String experimentalIntegrationsStr = JDOMExternalizerUtil.readField(element, FIELD_EXPERIMENTAL_INTEGRATIONS, "false");
         boolean experimentalIntegrations = Boolean.parseBoolean(experimentalIntegrationsStr);
 
-        List<EnvFileEntry> entries = new ArrayList<EnvFileEntry>();
+        String fieldId = JDOMExternalizerUtil.readField(element, FIELD_ID, UUID.randomUUID().toString());
+
+        List<EnvFileEntry> entries = new ArrayList<>();
 
         final Element entriesElement = element.getChild(ELEMENT_ENTRY_LIST);
         if (entriesElement != null) {
@@ -101,6 +105,7 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase<?>> exten
 
                 entries.add(
                         EnvFileEntry.builder()
+                                .id(fieldId)
                                 .parserId(parserId)
                                 .path(path)
                                 .enabled(isEntryEnabled)
@@ -110,24 +115,6 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase<?>> exten
             }
         }
 
-        // For a while to migrate old users - begin
-        boolean hasConfigEntry = false;
-        for (EnvFileEntry e : entries) {
-            if (e.getParserId().equals(RunConfigEnvVarsProvider.PARSER_ID)) {
-                hasConfigEntry = true;
-                break;
-            }
-        }
-        if (!hasConfigEntry) {
-            entries.add(
-                    EnvFileEntry.builder()
-                            .parserId(RunConfigEnvVarsProvider.PARSER_ID)
-                            .enabled(true)
-                            .executable(false)
-                            .build()
-            );
-        }
-        // For a while to migrate old users - end
         EnvFileSettings settings = EnvFileSettings.builder()
                 .pluginEnabled(isEnabled)
                 .envVarsSubstitutionEnabled(envVarsSubstEnabled)
@@ -153,6 +140,7 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase<?>> exten
             final Element entriesElement = new Element(ELEMENT_ENTRY_LIST);
             for (EnvFileEntry entry : state.getEntries()) {
                 final Element entryElement = new Element(ELEMENT_ENTRY_SINGLE);
+                entryElement.setAttribute(FIELD_ID, entry.getId());
                 entryElement.setAttribute(FIELD_IS_ENABLED, Boolean.toString(entry.getEnabled()));
                 entryElement.setAttribute(FIELD_PARSER, entry.getParserId());
                 entryElement.setAttribute(FIELD_IS_EXECUTABLE, Boolean.toString(entry.isExecutable()));
@@ -184,7 +172,7 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase<?>> exten
                         throw new ExecutionException(String.format("EnvFile: invalid path - %s", entry.getPath()));
                     }
 
-                    if (!EnvVarsProviderExtension.getParserFactoryById(entry.getParserId()).isPresent()) {
+                    if (EnvVarsProviderExtension.getParserFactoryById(entry.getParserId()).isEmpty()) {
                         throw new ExecutionException(String.format(
                                 "EnvFile: cannot load parser '%s' for '%s'", entry.getParserId(), entry.getPath()
                         ));

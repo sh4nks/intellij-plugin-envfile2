@@ -86,9 +86,7 @@ public class IdeaRunConfigurationExtension extends RunConfigurationExtension {
         // ExternalSystemExecuteTaskTask and ExternalSystemExecutionSettings and therefore may break any time may it change
         // It seems to be the only way to get things working for run configurations such as Gradle, at least for now
         if (EnvFileConfigurationEditor.isEnableExperimentalIntegrations(configuration)) {
-            if (configuration instanceof ExternalSystemRunConfiguration) {
-                ExternalSystemRunConfiguration ext = (ExternalSystemRunConfiguration) configuration;
-
+            if (configuration instanceof ExternalSystemRunConfiguration ext) {
                 ext.getSettings().setEnv(new ReadOnceMap<>(newEnv, ext.getSettings().getEnv()));
             }
         }
