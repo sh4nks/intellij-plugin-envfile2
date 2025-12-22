@@ -6,6 +6,7 @@ import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
+import com.intellij.openapi.actionSystem.impl.PresentationFactory;
 import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
@@ -17,6 +18,7 @@ import com.intellij.ui.AnActionButton;
 import com.intellij.ui.AnActionButtonUpdater;
 import com.intellij.ui.BooleanTableCellRenderer;
 import com.intellij.ui.ToolbarDecorator;
+import com.intellij.ui.popup.ActionPopupOptions;
 import com.intellij.ui.popup.PopupFactoryImpl;
 import com.intellij.ui.table.TableView;
 import com.intellij.util.ui.ColumnInfo;
@@ -33,6 +35,7 @@ import com.peterjustin.envfile.platform.ui.table.EnvFileIsActiveColumnInfo;
 import com.peterjustin.envfile.platform.ui.table.EnvFileIsExecutableColumnInfo;
 import com.peterjustin.envfile.platform.ui.table.EnvFilePathColumnInfo;
 import com.peterjustin.envfile.platform.ui.table.EnvFileTypeColumnInfo;
+import org.jetbrains.annotations.NotNull;
 
 
 import javax.swing.BoxLayout;
@@ -249,7 +252,7 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase<?>> extends JPane
                     String shortTitle = title.length() < 81 ? title : title.replaceFirst("(.{39}).+(.{39})", "$1...$2");
                     AnAction anAction = new AnAction(shortTitle, title, null) {
                         @Override
-                        public void actionPerformed(AnActionEvent e) {
+                        public void actionPerformed(@NotNull AnActionEvent e) {
                             ArrayList<EnvFileEntry> newList = new ArrayList<EnvFileEntry>(model.getItems());
                             newList.add(entry);
                             model.setItems(newList);
@@ -268,12 +271,31 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase<?>> extends JPane
         }
 
         final String popupPlace = ActionPlaces.getActionGroupPopupPlace(getClass().getSimpleName());
+/*
+                public ActionGroupPopup(@Nullable WizardPopup parentPopup,
+                @PopupTitle @Nullable String title,
+                @NotNull ActionGroup actionGroup,
+                @NotNull DataContext dataContext,
+                @NotNull String actionPlace,
+                @NotNull PresentationFactory presentationFactory,
+                @NotNull ActionPopupOptions options,
+                @Nullable Runnable disposeCallback) {
+
+  */
+
+        ActionPopupOptions actionPopupOptions = ActionPopupOptions.create(false, false, false, false, -1, false, Conditions.<AnAction>alwaysTrue());
+        final ListPopup popup =
+                new PopupFactoryImpl.ActionGroupPopup(
+                        null, "Add...", actionGroup, DataManager.getInstance().getDataContext(this),
+                        popupPlace, new PresentationFactory(), actionPopupOptions, null);
+
+        /*
         final ListPopup popup =
                 new PopupFactoryImpl.ActionGroupPopup(
                         "Add...", actionGroup, DataManager.getInstance().getDataContext(this),
                         false, false, false, false,
                         null, -1, Conditions.<AnAction>alwaysTrue(), popupPlace);
-
+               */
         if (button.getPreferredPopupPoint() != null) {
             popup.show(button.getPreferredPopupPoint());
         }

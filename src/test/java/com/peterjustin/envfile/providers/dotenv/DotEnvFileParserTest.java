@@ -2,6 +2,7 @@ package com.peterjustin.envfile.providers.dotenv;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.peterjustin.envfile.core.providers.dotenv.DotEnvFileParser;
 import lombok.SneakyThrows;
 import lombok.val;
 import org.junit.Test;

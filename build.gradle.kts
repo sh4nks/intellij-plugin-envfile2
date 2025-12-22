@@ -28,7 +28,7 @@ dependencies {
         implementation("org.jetbrains:annotations:26.0.2-1")
         implementation("org.yaml:snakeyaml:2.5")
         implementation("com.moandjiezana.toml:toml4j:0.7.2")
-        implementation("com.google.guava:guava:33.5-jre")
+        implementation("com.google.guava:guava:33.5.0-jre")
         implementation("org.apache.commons:commons-text:1.15.0")
 
         compileOnly("org.projectlombok:lombok:1.18.42")
