@@ -15,6 +15,7 @@ import com.peterjustin.envfile.core.exceptions.EnvFileException;
 import com.peterjustin.envfile.core.exceptions.InvalidEnvFileException;
 import org.apache.commons.text.StringSubstitutor;
 import org.jetbrains.annotations.NotNull;
+ import com.intellij.openapi.diagnostic.Logger;
 
 import java.io.File;
 import java.util.HashMap;
@@ -25,6 +26,7 @@ import java.util.Map;
 public class EnvFileEnvironmentVariables {
     private static final String NOTIFICATION_GROUP = "com.peterjustin.envfile";
 
+    private static final Logger LOGGER = Logger.getInstance(EnvFileEnvironmentVariables.class);
     private final ProjectFileResolver projectFileResolver = ProjectFileResolver.DEFAULT;
     private final EnvFileSettings envFileSettings;
 
@@ -59,6 +61,7 @@ public class EnvFileEnvironmentVariables {
                 continue;
             }
 
+            LOGGER.info("Using EnvFile entry: " + entry.getPath());
             try {
                 val file = projectFileResolver.resolvePath(project, entry.getPath());
                 val envVarsProvider = resolveEnvVarsProvider(project, baseEnv, entry);

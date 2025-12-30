@@ -5,14 +5,14 @@
   <vendor email="peter@peterjustin.com">Peter Justin</vendor>
 
   <description><![CDATA[
-      <h1>EnvFile</h1>
-      <b>Compiled with Java 1.8</b>
+      <h1>EnvFile2</h1>
+      <b>Compiled with Java 21</b>
       <h2>
         <a href="https://github.com/sh4nks/intellij-plugin-envfile2">GitHub</a> |
         <a href="https://github.com/sh4nks/intellij-plugin-envfile2/issues">Issues</a>
       </h2>
 
-      <b>Env File</b> is a plugin for JetBrains IDEs that allows you to set environment variables for your run configurations
+      <b>Env File2</b> is a plugin for JetBrains IDEs that allows you to set environment variables for your run configurations
       from one or multiple files.
       <br/>
 
@@ -29,22 +29,18 @@
 
       <h3>Supported Platforms:</h3>
       <ul>
-        <li><b>PyCharm</b></li>
         <li><b>IDEA</b></li>
-        <li><b>RubyMine</b></li>
-        <li><b>GoLand</b></li>
-        <li><b>Cursive</b></li>
       </ul>
     ]]></description>
 
   <change-notes><![CDATA[
-      <a href="https://github.com/Ashald/EnvFile/tree/v3.4.2"><b>v3.4.1</b></a> (2022-10-04)
+      <a href="https://github.com/sh4nks/intellij-plugin-envfile2</b></a>
       <br/>
       <br/>
 
       <b>Fixed</b>:
       <ul>
-        <li>Bump `org.apache.commons:commons-text` to `1.10.0'</li>
+        <li>Make it work with Intellij 2025.3</li>
       </ul>
 
       <br/>
@@ -68,6 +64,4 @@
   </extensions>
 
   <depends optional="true" config-file="envfile-idea.xml">com.intellij.modules.java</depends>
-  <depends optional="true" config-file="envfile-gradle.xml">com.intellij.gradle</depends>
-
 </idea-plugin>
